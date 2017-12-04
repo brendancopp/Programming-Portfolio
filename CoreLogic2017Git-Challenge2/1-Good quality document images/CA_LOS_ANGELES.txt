@@ -1,0 +1,89 @@
+
+{
+  "CA LOS ANGELES": [
+  //PreProcessors
+    
+    {
+      ""
+    }
+  //Location
+
+    document_HEADER: {
+      interest_point = "header",
+
+      header:{
+        regex:[date:["XXXXXX", "YYYYYY"], id:["XXXXXX", "YYYYYY"]]
+      }
+    }
+
+
+    file: {
+        interest_point = "file",
+
+        block_info:{
+          interest_point:[100, 25]
+          size_dp:[200, 150]
+          regex:[
+            date:["\d{1,2}/\d{1,2}/\d{4}", "\d{1,2}/\d{1,2}/\d{4}"],
+            id:["XXXXXXXX", "YYYYYYYYY"]
+          ]
+        }
+    }
+
+    file: {
+        interest_point = "file",
+
+        block_info:{
+          loc_dp:[100, 25],
+          size_dp:[200, 150]
+          regex:[
+            date:["\d{1,2}/\d{1,2}/\d{4}", "\d{1,2}/\d{1,2}/\d{4}"],
+            id:["XXXXXXXX", "YYYYYYYYY"]
+          ]
+        }
+    }
+
+
+    document_BLOCK: {
+      interest_point = "file",
+
+      date_info:{
+        loc_dp:[100, 25],
+        size_dp:[200, 150]
+        regex:[date:["XXXXXX", "YYYYYY"]]
+      }
+      id_info: {
+        loc_dp:[100, 25],
+        size_dp:[200, 150]
+        regex:[id:["XXXXXX", "YYYYYY"]]
+      }
+    }
+
+    
+
+        
+      },
+  //Collection
+
+    ]
+}
+
+document_location = CropBox.Box(909, 223, 1415, 303)
+    year_location = CropBox.Box(987, 513, 1121, 557)
+
+    #Open file
+    img = Image.open(file_name)
+
+    # Extract text from locations
+    document = get_text_from_image(img, document_location)
+    date = get_text_from_image(img, year_location)
+
+    # Format new name
+    year = "20" + date[6:8]
+    new_file_name = IndexSchemas.year_document(year, document)
+
+    # Save new image
+    IndexSchemas.rename_multi_page_tif(img, output_dir + new_file_name)
+    img.close()
+    print(document)
+    print(year)
